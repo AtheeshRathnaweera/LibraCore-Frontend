@@ -1,15 +1,15 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Auth0Service } from '../../core/services/auth0/auth0.service';
 import { User } from '@auth0/auth0-spa-js';
+import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-dashboard',
   imports: [CommonModule],
-  templateUrl: './home.component.html',
-  styleUrl: './home.component.css',
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.css',
 })
-export class HomeComponent {
+export class DashboardComponent {
   user: User | undefined;
 
   constructor(private auth0Service: Auth0Service) {
@@ -23,13 +23,6 @@ export class HomeComponent {
         console.error('User is undefined');
       }
     });
-    // this.auth0Client.getTokenWithPopup().then((token) => {
-    //   console.log('home component: token: ' + token);
-    // });
-  }
-
-  logout() {
-    this.auth0Service.logout();
   }
 
   getAccessToken() {

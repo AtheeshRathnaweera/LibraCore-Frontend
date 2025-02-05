@@ -12,14 +12,14 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     children: [
       {
-        path: 'home',
+        path: 'dashboard',
         loadComponent: () =>
-          import('./features/home/home.component').then((m) => m.HomeComponent),
+          import('./features/dashboard/dashboard.component').then((m) => m.DashboardComponent),
         canActivate: [AuthGuard],
       },
       {
         path: '',
-        redirectTo: 'home',
+        redirectTo: 'dashboard',
         pathMatch: 'full',
       },
     ],
