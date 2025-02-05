@@ -19,7 +19,7 @@ export class AuthCallbackComponent implements OnInit {
 
     auth0Client.handleRedirectCallback().then((response) => {
       console.log('auth-callback component: handleRedirectCallback:', response);
-      this.router.navigate(['/home']);
+      this.router.navigate(['/']);
     });
   }
 }
