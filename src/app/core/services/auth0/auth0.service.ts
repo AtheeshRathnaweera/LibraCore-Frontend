@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Auth0Client } from '@auth0/auth0-spa-js';
 import { environment } from '../../../../environments/environment';
+import { AppState } from '../../../state/app.state';
+import { Store } from '@ngrx/store';
+import { clearUser, setUser } from '../../../state/user/user.actions';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +11,7 @@ import { environment } from '../../../../environments/environment';
 export class Auth0Service {
   private auth0Client!: Auth0Client;
 
-  constructor() {
+  constructor(private store: Store<AppState>) {
     this.initializeAuth0Client();
   }
 
@@ -24,6 +27,13 @@ export class Auth0Service {
     });
   }
 
+  async initializeUser(): Promise<void> {
+    const user = await this.auth0Client.getUser();
+    if (user) {
+      this.store.dispatch(setUser({ user }));
+    }
+  }
+
   getClient(): Auth0Client {
     return this.auth0Client;
   }
@@ -34,5 +44,6 @@ export class Auth0Service {
         returnTo: environment.auth0.logoutUrl,
       },
     });
+    this.store.dispatch(clearUser());
   }
 }
