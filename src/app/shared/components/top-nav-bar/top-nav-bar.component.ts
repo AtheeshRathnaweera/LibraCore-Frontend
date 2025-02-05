@@ -7,46 +7,37 @@ import {
 } from '@angular/core';
 import { User } from '@auth0/auth0-spa-js';
 import { Auth0Service } from '../../../core/services/auth0/auth0.service';
+import { AppState } from '../../../state/app.state';
+import { Store } from '@ngrx/store';
+import { selectUser } from '../../../state/user/user.selectors';
+import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-top-nav-bar',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './top-nav-bar.component.html',
   styleUrl: './top-nav-bar.component.css',
 })
 export class TopNavBarComponent implements OnInit, AfterViewInit {
-  user: User | undefined;
+  user$: Observable<User | null>;
 
   constructor(
     private el: ElementRef,
     private renderer: Renderer2,
-    private auth0Service: Auth0Service
-  ) {}
+    private auth0Service: Auth0Service,
+    private store: Store<AppState>
+  ) {
+    this.user$ = this.store.select(selectUser);
+  }
 
   ngOnInit(): void {
-    this.initializeUser();
+    this.user$ = this.store.select(selectUser);
   }
 
   ngAfterViewInit(): void {
     this.setupSidebarToggle();
     this.setupSearchBarToggle();
-  }
-
-  private initializeUser(): void {
-    const auth0Client = this.auth0Service.getClient();
-
-    auth0Client
-      .getUser()
-      .then((user) => {
-        if (user) {
-          this.user = user;
-        } else {
-          console.error('User is undefined');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching user:', error);
-      });
   }
 
   private setupSidebarToggle(): void {

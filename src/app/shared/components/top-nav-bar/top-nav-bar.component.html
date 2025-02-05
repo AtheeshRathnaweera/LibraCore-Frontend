@@ -48,14 +48,14 @@
             style="opacity: 0.65;"
           />
           <span class="d-none d-md-block dropdown-toggle ps-2">
-            {{ truncateText(user?.name || "", 15) }}
+            {{ truncateText((user$ | async)?.name || "", 15) }}
           </span>
         </a>
 
         <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
           <li class="dropdown-header">
-            <h6>{{ user?.name }}</h6>
-            <span>{{ user?.email }}</span>
+            <h6>{{ (user$ | async)?.name }}</h6>
+            <span>{{ (user$ | async)?.email }}</span>
           </li>
           <li>
             <hr class="dropdown-divider" />
