@@ -1,4 +1,12 @@
-import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
+import { User } from '@auth0/auth0-spa-js';
+import { Auth0Service } from '../../../core/services/auth0/auth0.service';
 
 @Component({
   selector: 'app-top-nav-bar',
@@ -6,12 +14,39 @@ import { AfterViewInit, Component, ElementRef, Renderer2 } from '@angular/core';
   templateUrl: './top-nav-bar.component.html',
   styleUrl: './top-nav-bar.component.css',
 })
-export class TopNavBarComponent implements AfterViewInit {
-  constructor(private el: ElementRef, private renderer: Renderer2) {}
+export class TopNavBarComponent implements OnInit, AfterViewInit {
+  user: User | undefined;
+
+  constructor(
+    private el: ElementRef,
+    private renderer: Renderer2,
+    private auth0Service: Auth0Service
+  ) {}
+
+  ngOnInit(): void {
+    this.initializeUser();
+  }
 
   ngAfterViewInit(): void {
     this.setupSidebarToggle();
     this.setupSearchBarToggle();
+  }
+
+  private initializeUser(): void {
+    const auth0Client = this.auth0Service.getClient();
+
+    auth0Client
+      .getUser()
+      .then((user) => {
+        if (user) {
+          this.user = user;
+        } else {
+          console.error('User is undefined');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching user:', error);
+      });
   }
 
   private setupSidebarToggle(): void {
@@ -48,5 +83,16 @@ export class TopNavBarComponent implements AfterViewInit {
         }
       });
     }
+  }
+
+  truncateText(text: string, limit: number): string {
+    return text.length > limit ? text.substring(0, limit) + '...' : text;
+  }
+
+  signOut(event: MouseEvent) {
+    if (event) {
+      event.preventDefault();
+    }
+    this.auth0Service.logout();
   }
 }
