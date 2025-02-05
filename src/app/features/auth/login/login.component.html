@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="info">
+    <h1>Sign In</h1>
+  </div>
+</div>
+<div class="form card">
+  <div class="thumbnail"><img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/169963/hat.svg"/></div>
+  <!-- <form class="register-form">
+    <input type="text" placeholder="name"/>
+    <input type="password" placeholder="password"/>
+    <input type="text" placeholder="email address"/>
+    <button>create</button>
+    <p class="message">Already registered? <a href="#">Sign In</a></p>
+  </form> -->
+  <form [formGroup]="loginForm" class="login-form" (ngSubmit)="onSubmit()">
+    <input formControlName="username" type="text" placeholder="username" readonly/>
+    <input formControlName="password" type="password" placeholder="password" readonly/>
+    <button type="button" class="btn btn-primary" disabled style="background: #EF3B3A;">SignIn</button>
+  </form>
+  <button type="button" class="btn btn-info mt-2" (click)="onAuth0Login()">Login via Auth0</button>
+  <p class="message">Not registered? <a href="#">Create an account</a></p>
+</div>
